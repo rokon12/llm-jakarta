@@ -4,9 +4,11 @@ import dev.langchain4j.model.openai.OpenAiChatModel;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j
 @ApplicationScoped
 @NoArgsConstructor
 public class LangChainService {
@@ -27,6 +29,7 @@ public class LangChainService {
     }
 
     public String sendMessage(String userMessage) {
+        log.info("User message: {}", userMessage);
         String chatResponse = chatModel.generate(userMessage);
         return Optional.ofNullable(chatResponse).orElse("Sorry, I couldn't understand that.");
     }
