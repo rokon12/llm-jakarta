@@ -120,7 +120,6 @@
     box-sizing: border-box;
 }
 
-/* Chat message styles */
 .chat-window p {
     margin: 0;
     padding: 10px 15px;
@@ -129,6 +128,85 @@
     max-width: 75%;
     display: inline-block;
     font-size: 14px;
+}
+
+.message-bubble {
+    display: block;
+    margin: 5px 0;
+    padding: 10px 15px;
+    border-radius: 15px;
+    word-wrap: break-word;
+    max-width: 75%;
+    box-sizing: border-box;
+}
+
+.message-bubble.user {
+    background-color: #1b52a0; /* Jakarta EE blue */
+    color: #fff;
+    align-self: flex-end;
+    text-align: left;
+    border-top-right-radius: 0;
+}
+
+.message-bubble.bot {
+    background-color: #ffd700; /* Jakarta EE orange */
+    color: #333;
+    align-self: flex-start;
+    text-align: left;
+    border-top-left-radius: 0;
+}
+
+.markdown-content {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+    overflow-wrap: break-word; /* Prevent long text from breaking layout */
+}
+
+/* Markdown-specific styles */
+.markdown-content h1, .markdown-content h2, .markdown-content h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.markdown-content p {
+    margin: 5px 0;
+}
+
+.markdown-content ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.markdown-content li {
+    margin-bottom: 5px;
+}
+
+.markdown-content code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: #d6336c;
+}
+
+/* Code blocks */
+.markdown-content pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+}
+
+/* Prevent excessive Markdown block expansion */
+.markdown-content img, .markdown-content table {
+    max-width: 100%; /* Ensure images and tables fit within the bubble */
+    height: auto;
+    display: block;
 }
 
 /* User messages */
@@ -322,6 +400,43 @@
     100% {
         opacity: 0.2;
         transform: translateY(0);
+    }
+}
+
+.error-bubble {
+    position: fixed;
+    bottom: 100px; /* Adjust to appear above the chat icon */
+    right: 20px;
+    background-color: #ff4d4f; /* Red background for error */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2000; /* Ensure it appears above other elements */
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.5s, fadeOut 5s 3s; /* Fade in, then fade out */
+}
+
+/* Fade in/out animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
     }
 }
 

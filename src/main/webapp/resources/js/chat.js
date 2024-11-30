@@ -8,24 +8,29 @@ function connect() {
     const path = `${contextPath}/chat`;
     const wsUrl = `${protocol}//${host}${path}`;
 
-    socket = new WebSocket(wsUrl);
+    try {
+        socket = new WebSocket(wsUrl);
 
-    socket.onmessage = function (event) {
-        hideTypingIndicator(); // Hide typing indicator when message is received
-        addMessage(event.data, "bot"); // Display bot response
-    };
+        socket.onmessage = function (event) {
+            hideTypingIndicator(); // Hide typing indicator when message is received
+            addMessage(event.data, "bot"); // Display bot response
+        };
 
-    socket.onopen = function () {
-        console.log("Connected to WebSocket");
-    };
+        socket.onopen = function () {
+            console.log("Connected to WebSocket");
+        };
 
-    socket.onclose = function () {
-        console.log("Disconnected from WebSocket");
-    };
+        socket.onclose = function () {
+            console.log("Disconnected from WebSocket");
+        };
 
-    socket.onerror = function (error) {
-        console.error("WebSocket error:", error);
-    };
+        socket.onerror = function (error) {
+            console.error("WebSocket error:", error);
+        };
+    } catch (e) {
+        console.error("WebSocket connection failed:", error);
+        showErrorBubble("Unable to connect to the chatbot. Please try again later.");
+    }
 }
 
 function sendMessage() {
@@ -43,10 +48,14 @@ function sendMessage() {
 function addMessage(text, type) {
     const chatWindow = document.getElementById("chat-window");
     const messageElement = document.createElement("div");
-    messageElement.classList.add("message", type); // Add "message" and "user"/"bot" class
-    messageElement.innerHTML = `<p>${text}</p>`;
-    chatWindow.appendChild(messageElement);
 
+    messageElement.classList.add("message-bubble", type);
+    if (type === "bot") {
+        messageElement.innerHTML = `<div class="markdown-content">${marked.parse(text)}</div>`;
+    } else {
+        messageElement.textContent = text;
+    }
+    chatWindow.appendChild(messageElement);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
@@ -77,4 +86,13 @@ function getApplicationContext() {
     const pathname = window.location.pathname;
     const context = pathname.split("/")[1];
     return context ? `/${context}` : "";
+}
+
+function showErrorBubble(message) {
+    const errorBubble = document.getElementById("error-bubble");
+    errorBubble.textContent = message;
+    errorBubble.style.display = "flex";
+    setTimeout(() => {
+        errorBubble.style.display = "none";
+    }, 5000);
 }

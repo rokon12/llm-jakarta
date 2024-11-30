@@ -3,7 +3,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html">
 <h:head>
     <title>Welcome to Jakarta EE Chatbot</title>
-    <link rel="stylesheet" href="#{request.contextPath}/resources/css/chat.css" />
+    <link rel="stylesheet" href="#{request.contextPath}/resources/css/chat.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="#{request.contextPath}/resources/js/chat.js"></script>
     <script>
         function toggleChat() {
@@ -36,13 +37,18 @@
     <!-- Chat Container -->
     <div id="chat-container" class="chat-container" style="display: none;">
         <div class="chat-header">
-            <img src="#{request.contextPath}/resources/images/jakartaee_logo.jpg" alt="Jakarta EE Logo" class="jakarta-logo" />
+            <img src="#{request.contextPath}/resources/images/jakartaee_logo.jpg" alt="Jakarta EE Logo"
+                 class="jakarta-logo"/>
             <h1 class="chat-title">AI Chatbot</h1>
             <button class="chat-minimize" onclick="toggleChat()">−</button>
         </div>
+        <div id="error-bubble" class="error-bubble" style="display: none;">
+            Unable to connect to the chatbot. Please try again later.
+        </div>
+
         <div id="chat-window" class="chat-window"></div>
         <div class="chat-input-container">
-            <input id="message-input" class="chat-input" type="text" placeholder="Type your message here..." />
+            <input id="message-input" class="chat-input" type="text" placeholder="Type your message here..."/>
             <button class="chat-send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
