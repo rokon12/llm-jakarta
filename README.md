@@ -67,4 +67,4 @@ We welcome contributions to enhance this chatbot. If you'd like to contribute, f
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE.md).
+This project is licensed under the [MIT License](LICENSE).
