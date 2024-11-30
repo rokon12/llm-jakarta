@@ -3,11 +3,21 @@ let typingIndicator;
 let currentStreamingMessage = null; // Track the current bot message bubble
 let markdownBuffer = ""; // Buffer to hold Markdown fragments during streaming
 
+function getUserId() {
+    let userId = localStorage.getItem("userId");
+    if (!userId) {
+        userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+        localStorage.setItem("userId", userId);
+    }
+    return userId;
+}
+
 function connect() {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const host = window.location.host;
+    const userId = getUserId();
     const contextPath = getApplicationContext();
-    const path = `${contextPath}/chat`;
+    const path = `${contextPath}/chat?userId=${userId}`;
     const wsUrl = `${protocol}//${host}${path}`;
 
     try {
@@ -17,15 +27,12 @@ function connect() {
             const data = event.data;
 
             if (data === "[END]") {
-                // Finalize the current bot message when streaming ends
                 finalizeStreamingMessage();
                 hideTypingIndicator();
             } else {
-                // Create a new bot bubble if none exists for this response
                 if (!currentStreamingMessage) {
                     createNewBotBubble();
                 }
-                // Append streaming data to the buffer and show raw content temporarily
                 appendToStreamingBuffer(data);
             }
         };
@@ -37,6 +44,7 @@ function connect() {
         socket.onclose = function () {
             console.log("Disconnected from WebSocket");
             hideTypingIndicator();
+            showErrorBubble("The connection to the chatbot has been closed. Please refresh the page to reconnect.");
         };
 
         socket.onerror = function (error) {
@@ -56,8 +64,13 @@ function sendMessage() {
 
     if (message) {
         addMessage(message, "user");
-        showTypingIndicator();
-        socket.send(message);
+        if (socket.readyState === WebSocket.OPEN) {
+            showTypingIndicator();
+            socket.send(message);
+        } else {
+            console.error("Failed to send message: WebSocket is not open");
+            showErrorBubble("Failed to send message. Please try again.");
+        }
         input.value = "";
     }
 }
@@ -68,16 +81,13 @@ function createNewBotBubble() {
     currentStreamingMessage.classList.add("message-bubble", "bot");
     chatWindow.appendChild(currentStreamingMessage);
 
-    // Auto-scroll to show the latest message
     chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
 function appendToStreamingBuffer(textFragment) {
     if (currentStreamingMessage) {
-        // Append the fragment to the buffer
         markdownBuffer += textFragment;
 
-        // Show raw content temporarily
         currentStreamingMessage.innerHTML = markdownBuffer.endsWith(" ")
             ? markdownBuffer
             : markdownBuffer + " ";
@@ -86,7 +96,6 @@ function appendToStreamingBuffer(textFragment) {
 
 function finalizeStreamingMessage() {
     if (currentStreamingMessage) {
-        // Render the complete Markdown content
         currentStreamingMessage.innerHTML = `<div class="markdown-content">${marked.parse(markdownBuffer)}</div>`;
         currentStreamingMessage = null; // Reset for the next bot message
         markdownBuffer = ""; // Clear the buffer
@@ -140,7 +149,8 @@ function showErrorBubble(message) {
     const errorBubble = document.getElementById("error-bubble");
     errorBubble.textContent = message;
     errorBubble.style.display = "flex";
-    setTimeout(() => {
+
+    errorBubble.onclick = function () {
         errorBubble.style.display = "none";
-    }, 5000);
+    };
 }

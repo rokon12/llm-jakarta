@@ -6,6 +6,7 @@
     padding: 20px;
     font-family: 'Roboto', sans-serif;
     color: #333;
+    align-items: center;
 }
 
 .main-page-content h1 {
@@ -21,6 +22,11 @@
     color: #555;
 }
 
+.main-page-content img {
+    margin-bottom: 20px;
+    max-width: 300px;
+    height: auto;
+}
 
 /* General container styles */
 .chat-container {
@@ -58,7 +64,7 @@
 
 /* Logo styles */
 .jakarta-logo {
-    max-width: 100px; /* Adjust size for balance */
+    max-width: 100px;
     height: auto;
     display: block;
 }
@@ -405,21 +411,20 @@
 
 .error-bubble {
     position: fixed;
-    bottom: 100px; /* Adjust to appear above the chat icon */
+    bottom: 120px;
     right: 20px;
-    background-color: #ff4d4f; /* Red background for error */
+    background-color: #ff4d4f;
     color: #fff;
     padding: 10px 20px;
     border-radius: 10px;
     font-size: 14px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 2000; /* Ensure it appears above other elements */
+    z-index: 2000;
     display: flex;
     align-items: center;
-    animation: fadeIn 0.5s, fadeOut 5s 3s; /* Fade in, then fade out */
+    animation: fadeIn 0.5s;
 }
 
-/* Fade in/out animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -439,29 +444,3 @@
         opacity: 0;
     }
 }
-
-/*.message-bubble.streaming-bubble {*/
-/*    background-color: #ffd700; !* Jakarta EE orange *!*/
-/*    color: #333;*/
-/*    padding: 10px 15px;*/
-/*    border-radius: 10px;*/
-/*    margin: 5px 0;*/
-/*    max-width: 75%;*/
-/*    word-wrap: break-word;*/
-/*    align-self: flex-start;*/
-/*    text-align: left;*/
-/*    border-style: none;*/
-/*}*/
-
-/*.message-bubble.bot {*/
-/*    background-color: #ffd700;*/
-/*    color: #333;*/
-/*    padding: 10px 15px;*/
-/*    border-radius: 10px;*/
-/*    margin: 5px 0;*/
-/*    max-width: 75%;*/
-/*    word-wrap: break-word;*/
-/*    align-self: flex-start;*/
-/*    text-align: left;*/
-/*    border-style: none;*/
-/*}*/
