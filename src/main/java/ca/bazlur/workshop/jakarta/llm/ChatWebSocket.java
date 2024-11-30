@@ -6,11 +6,13 @@ import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@Slf4j
 @ServerEndpoint("/chat")
 public class ChatWebSocket {
     private static final Set<Session> sessions = new CopyOnWriteArraySet<>();
@@ -25,13 +27,13 @@ public class ChatWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        String botResponse = langChainService.sendMessage(message);
-
-        try {
-            session.getBasicRemote().sendText("Bot: " + botResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        langChainService.sendMessage(message, (next) -> {
+            try {
+                session.getBasicRemote().sendText(next);
+            } catch (IOException e) {
+                log.error("Error occurred", e);
+            }
+        });
     }
 
     @OnClose

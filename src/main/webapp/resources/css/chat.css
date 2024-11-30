@@ -149,7 +149,7 @@
 }
 
 .message-bubble.bot {
-    background-color: #ffd700; /* Jakarta EE orange */
+    background-color: #ffd700;
     color: #333;
     align-self: flex-start;
     text-align: left;
@@ -440,4 +440,28 @@
     }
 }
 
+/*.message-bubble.streaming-bubble {*/
+/*    background-color: #ffd700; !* Jakarta EE orange *!*/
+/*    color: #333;*/
+/*    padding: 10px 15px;*/
+/*    border-radius: 10px;*/
+/*    margin: 5px 0;*/
+/*    max-width: 75%;*/
+/*    word-wrap: break-word;*/
+/*    align-self: flex-start;*/
+/*    text-align: left;*/
+/*    border-style: none;*/
+/*}*/
 
+/*.message-bubble.bot {*/
+/*    background-color: #ffd700;*/
+/*    color: #333;*/
+/*    padding: 10px 15px;*/
+/*    border-radius: 10px;*/
+/*    margin: 5px 0;*/
+/*    max-width: 75%;*/
+/*    word-wrap: break-word;*/
+/*    align-self: flex-start;*/
+/*    text-align: left;*/
+/*    border-style: none;*/
+/*}*/
