@@ -34,8 +34,20 @@
 		<dependency>
 			<groupId>jakarta.faces</groupId>
 			<artifactId>jakarta.faces-api</artifactId>
-			<version>4.0.0</version> <!-- Adjust version as needed -->
+			<version>4.0.0</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j-open-ai</artifactId>
+			<version>0.36.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>dev.langchain4j</groupId>
+			<artifactId>langchain4j</artifactId>
+			<version>0.36.2</version>
 		</dependency>
 
 	</dependencies>

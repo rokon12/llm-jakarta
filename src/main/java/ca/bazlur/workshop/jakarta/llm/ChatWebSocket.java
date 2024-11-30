@@ -1,5 +1,6 @@
-package ca.bazlur.workshop.jakarta.hello;
+package ca.bazlur.workshop.jakarta.llm;
 
+import jakarta.inject.Inject;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
 import jakarta.websocket.OnOpen;
@@ -14,6 +15,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class ChatWebSocket {
     private static final Set<Session> sessions = new CopyOnWriteArraySet<>();
 
+    @Inject
+    private LangChainService langChainService;
+
     @OnOpen
     public void onOpen(Session session) {
         sessions.add(session);
@@ -21,7 +25,7 @@ public class ChatWebSocket {
 
     @OnMessage
     public void onMessage(String message, Session session) {
-        String botResponse = getBotResponse(message); // Replace with LLM integration
+        String botResponse = langChainService.sendMessage(message);
 
         try {
             session.getBasicRemote().sendText("Bot: " + botResponse);
@@ -33,15 +37,5 @@ public class ChatWebSocket {
     @OnClose
     public void onClose(Session session) {
         sessions.remove(session);
-    }
-
-    private String getBotResponse(String userMessage) {
-        try {
-            Thread.sleep(2000); // Delay for 2 seconds
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-
-        return "You said: " + userMessage + ". I'm a bot!";
     }
 }
