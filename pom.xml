@@ -39,6 +39,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.eclipse.microprofile.config</groupId>
+			<artifactId>microprofile-config-api</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j-open-ai</artifactId>
 			<version>0.36.2</version>
@@ -50,6 +56,12 @@
 			<version>0.36.2</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.36</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

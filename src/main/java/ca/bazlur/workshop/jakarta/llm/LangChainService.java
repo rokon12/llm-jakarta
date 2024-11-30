@@ -1,19 +1,28 @@
 package ca.bazlur.workshop.jakarta.llm;
 
-import dev.langchain4j.model.chat.request.ChatRequest;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
 @ApplicationScoped
+@NoArgsConstructor
 public class LangChainService {
-    private final OpenAiChatModel chatModel;
+    private OpenAiChatModel chatModel;
 
-    public LangChainService() {
+    @Inject
+    public LangChainService(LangChain4JConfig config) {
         chatModel = OpenAiChatModel.builder()
-                .apiKey(System.getenv("OPENAI_API_KEY"))
-                .modelName("gpt-3.5-turbo")
+                .apiKey(config.getApiKey())
+                .modelName(config.getModelName())
+                .temperature(config.getTemperature())
+                .timeout(config.getTimeout())
+                .maxTokens(config.getMaxTokens())
+                .frequencyPenalty(config.getFrequencyPenalty())
+                .logRequests(config.isLogRequests())
+                .logResponses(config.isLogResponses())
                 .build();
     }
 
