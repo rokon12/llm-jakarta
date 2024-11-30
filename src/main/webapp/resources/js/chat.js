@@ -1,4 +1,5 @@
 let socket;
+let typingIndicator;
 
 function connect() {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -10,7 +11,8 @@ function connect() {
     socket = new WebSocket(wsUrl);
 
     socket.onmessage = function (event) {
-        addMessage(event.data, "bot"); // Bot response
+        hideTypingIndicator(); // Hide typing indicator when message is received
+        addMessage(event.data, "bot"); // Display bot response
     };
 
     socket.onopen = function () {
@@ -31,21 +33,44 @@ function sendMessage() {
     const message = input.value.trim();
 
     if (message) {
-        addMessage(message, "user"); // User message
-        socket.send(message); // Send to server
-        input.value = ""; // Clear input
+        addMessage(message, "user"); // Display user message
+        showTypingIndicator(); // Show typing indicator before sending message
+        socket.send(message); // Send message to server
+        input.value = ""; // Clear input field
     }
 }
 
 function addMessage(text, type) {
     const chatWindow = document.getElementById("chat-window");
-    const messageElement = document.createElement("p");
-    messageElement.classList.add(type); // Add "user" or "bot" class
-    messageElement.textContent = text;
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("message", type); // Add "message" and "user"/"bot" class
+    messageElement.innerHTML = `<p>${text}</p>`;
     chatWindow.appendChild(messageElement);
 
-    // Scroll to the latest message
     chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
+function showTypingIndicator() {
+    if (!typingIndicator) {
+        const chatWindow = document.getElementById("chat-window");
+        typingIndicator = document.createElement("div");
+        typingIndicator.classList.add("message", "bot", "typing");
+        typingIndicator.innerHTML = `
+            <div class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+        `;
+        chatWindow.appendChild(typingIndicator);
+
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+}
+
+function hideTypingIndicator() {
+    if (typingIndicator) {
+        typingIndicator.parentNode.removeChild(typingIndicator);
+        typingIndicator = null;
+    }
 }
 
 function getApplicationContext() {

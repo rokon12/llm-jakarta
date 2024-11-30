@@ -1,26 +1,46 @@
-/* General container styles */
 .chat-container {
-    max-width: 600px;
-    margin: 50px auto;
+    width: 400px; /* Reduce the width for a compact look */
+    margin: 50px auto; /* Center the chatbox horizontally and add spacing from the top */
     border: 1px solid #ddd;
     border-radius: 15px;
     background-color: #fdfdfd;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     font-family: 'Roboto', sans-serif;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
+
 /* Header styles */
 .chat-header {
-    background-color: #007bff;
-    color: #fff;
+    background-color: #fdfdfd; /* Neutral white background */
+    color: #1b52a0; /* Jakarta EE blue for text */
     text-align: center;
-    padding: 15px 20px;
+    padding: 20px;
     font-size: 18px;
     font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid #1b52a0; /* Adds a subtle separator */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+/* Logo styles */
+.jakarta-logo {
+    max-width: 150px; /* Adjust size for balance */
+    height: auto;
+    display: block;
+}
+
+/* Title styles */
+.chat-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1b52a0; /* Matches Jakarta EE logo's blue */
+    margin: 0;
 }
 
 /* Chat window styles */
@@ -28,10 +48,11 @@
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    background-color: #fafafa;
+    background-color: #f4f4f4; /* Light gray for contrast */
     display: flex;
     flex-direction: column;
     gap: 10px;
+    box-sizing: border-box;
 }
 
 /* Chat message styles */
@@ -47,19 +68,17 @@
 
 /* User messages */
 .chat-window p.user {
-    background-color: #007bff;
+    background-color: #1b52a0; /* Jakarta EE blue */
     color: #fff;
     align-self: flex-end;
-    animation: slideInRight 0.3s ease-in-out;
     border-top-right-radius: 0;
 }
 
 /* Bot messages */
 .chat-window p.bot {
-    background-color: #e9ecef;
+    background-color: #ffd700; /* Jakarta EE orange */
     color: #333;
     align-self: flex-start;
-    animation: slideInLeft 0.3s ease-in-out;
     border-top-left-radius: 0;
 }
 
@@ -67,7 +86,7 @@
 .chat-input-container {
     display: flex;
     padding: 15px 20px;
-    background-color: #f5f5f5;
+    background-color: #fff; /* Bright background for input */
     border-top: 1px solid #ddd;
     gap: 10px;
     align-items: center;
@@ -78,14 +97,14 @@
     flex-grow: 1;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 20px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s ease;
 }
 
 .chat-input:focus {
-    border-color: #007bff;
+    border-color: #1b52a0; /* Jakarta EE blue */
     outline: none;
 }
 
@@ -95,7 +114,7 @@
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    background-color: #007bff;
+    background-color: #1b52a0; /* Jakarta EE blue */
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -103,7 +122,7 @@
 }
 
 .chat-send-button:hover {
-    background-color: #0056b3;
+    background-color: #14427a; /* Darker blue for hover effect */
     transform: scale(1.05);
 }
 
@@ -133,3 +152,88 @@
         transform: translateX(0);
     }
 }
+
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.bot {
+    justify-content: flex-start;
+}
+
+/* Message bubble styles */
+.message p {
+    margin: 0;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 75%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
+
+.message.user p {
+    background-color: #007bff;
+    color: #fff;
+    border-top-right-radius: 0;
+}
+
+.message.bot p {
+    background-color: #e9ecef;
+    color: #333;
+    border-top-left-radius: 0;
+}
+
+/* Typing indicator styles */
+.message.typing p {
+    background-color: transparent;
+    padding: 0;
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #e9ecef;
+    border-radius: 20px;
+    border-top-left-radius: 0;
+}
+
+.typing-indicator span {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #777;
+    border-radius: 50%;
+    animation: typing 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0% {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 0.2;
+        transform: translateY(0);
+    }
+}
+
+

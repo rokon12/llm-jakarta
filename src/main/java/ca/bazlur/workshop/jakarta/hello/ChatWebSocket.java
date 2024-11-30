@@ -36,6 +36,12 @@ public class ChatWebSocket {
     }
 
     private String getBotResponse(String userMessage) {
+        try {
+            Thread.sleep(2000); // Delay for 2 seconds
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         return "You said: " + userMessage + ". I'm a bot!";
     }
 }
