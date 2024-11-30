@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="#{request.contextPath}/resources/css/chat.css" />
+    <script src="#{request.contextPath}/resources/js/chat.js"></script>
+    <script>
+        window.onload = function () {
+            connect(); // Call connect when the page loads
+            const messageInput = document.getElementById("message-input");
+            messageInput.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage(); // Send message when "Enter" is pressed
+                    event.preventDefault(); // Prevent default form submission
+                }
+            });
+        };
+    </script>
+</h:head>
+<h:body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1 class="chat-title">Conversational AI Chatbot</h1>
+        </div>
+        <div id="chat-window" class="chat-window"></div>
+        <div class="chat-input-container">
+            <input id="message-input" class="chat-input" type="text" placeholder="Type your message here..." />
+            <button class="chat-send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</h:body>
+</html>
