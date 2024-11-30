@@ -10,10 +10,13 @@
         function toggleChat() {
             const chatContainer = document.getElementById("chat-container");
             chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
+
+            if (chatContainer.style.display === "flex" &amp;&amp; (!socket || socket.readyState !== WebSocket.OPEN)) {
+                connect();
+            }
         }
 
         window.onload = function () {
-            connect(); // Call connect when the page loads
             const messageInput = document.getElementById("message-input");
             messageInput.addEventListener("keypress", function (event) {
                 if (event.key === "Enter") {
@@ -27,6 +30,7 @@
 <h:body>
     <!-- Main Page Welcome Message -->
     <div class="main-page-content">
+        <img src="#{request.contextPath}/resources/images/jakartaee_logo.jpg" alt="Jakarta EE Logo"/>
         <h1>Welcome to Jakarta EE AI Chatbot</h1>
         <p>
             This chatbot is here to help you learn about Jakarta EE technologies, answer your questions,
