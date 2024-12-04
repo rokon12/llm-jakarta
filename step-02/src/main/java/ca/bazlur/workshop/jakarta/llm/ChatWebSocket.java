@@ -35,6 +35,7 @@ public class ChatWebSocket {
                 Welcome to the Jakarta EE AI Chatbot! 🚀
                 I’m here to help with all your Jakarta EE questions—whether you’re exploring the basics or solving advanced challenges.  
                 Let’s build something great together! 🎉""");
+        sendMessage(session,"[END]");
     }
 
     @OnMessage

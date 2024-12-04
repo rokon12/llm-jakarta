@@ -31,7 +31,7 @@
 /* General container styles */
 .chat-container {
     width: 400px; /* Width of the chat window */
-    height: 500px; /* Height of the chat window */
+    height: 800px; /* Height of the chat window */
     position: fixed; /* Fixed position for floating effect */
     bottom: 80px; /* Distance from the bottom of the screen */
     right: 20px; /* Distance from the right of the screen */

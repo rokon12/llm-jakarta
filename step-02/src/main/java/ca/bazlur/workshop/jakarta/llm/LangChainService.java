@@ -1,6 +1,7 @@
 package ca.bazlur.workshop.jakarta.llm;
 
 import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.service.AiServices;
@@ -30,7 +31,11 @@ public class LangChainService {
                 .logResponses(config.isLogResponses())
                 .build();
 
-        jakartaEEAgent = AiServices.create(JakartaEEAgent.class, chatModel);
+        jakartaEEAgent = AiServices
+                .builder(JakartaEEAgent.class)
+                .streamingChatLanguageModel(chatModel)
+                .chatMemory(MessageWindowChatMemory.builder().maxMessages(config.getMaxMemorySize()).build())
+                .build();
     }
 
     public void sendMessage(String userId, String message, Consumer<String> consumer) {
