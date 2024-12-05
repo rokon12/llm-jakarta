@@ -2,53 +2,57 @@ package ca.bazlur.workshop.jakarta.llm.util;
 
 public class InputNormalizer {
 
+    private InputNormalizer() {}
+
     public static double normalizeVersion(String input) {
-        String normalized = normalizeJakartaVersion(input);
-        return Double.parseDouble(normalized);
+        return Double.parseDouble(normalizeJakartaVersion(input));
     }
 
     public static String normalizeJakartaVersion(String input) {
-        if (input.toLowerCase().contains("8")) return "8";
-        if (input.toLowerCase().contains("9.1")) return "9.1";
-        if (input.toLowerCase().contains("9")) return "9";
-        if (input.toLowerCase().contains("10")) return "10";
-        if (input.toLowerCase().contains("11")) return "11";
+        String lowerCaseInput = input.toLowerCase();
+        if (lowerCaseInput.contains("11")) return "11";
+        if (lowerCaseInput.contains("10")) return "10";
+        if (lowerCaseInput.contains("9.1")) return "9.1";
+        if (lowerCaseInput.contains("9")) return "9";
+        if (lowerCaseInput.contains("8")) return "8";
         throw new IllegalArgumentException("Unsupported Jakarta EE version: " + input);
     }
 
     public static String normalizeProfile(String input) {
-        if (input.toLowerCase().contains("platform")) return "full";
-        if (input.toLowerCase().contains("web")) return "web";
-        if (input.toLowerCase().contains("core")) return "core";
-        return input;
+        String lowerCaseInput = input.toLowerCase().trim();
+        if (lowerCaseInput.contains("full") || lowerCaseInput.contains("platform")) return "full";
+        if (lowerCaseInput.contains("web")) return "web";
+        if (lowerCaseInput.contains("core")) return "core";
+        throw new IllegalArgumentException("Unsupported profile: " + input);
     }
 
     public static int normalizeJavaVersion(String input) {
-        if (input.contains("8")) return 8;
-        if (input.contains("11")) return 11;
-        if (input.contains("17")) return 17;
         if (input.contains("21")) return 21;
+        if (input.contains("17")) return 17;
+        if (input.contains("11")) return 11;
+        if (input.contains("8")) return 8;
         throw new IllegalArgumentException("Unsupported Java version: " + input);
     }
 
     public static boolean normalizeDocker(String input) {
-        if (input.toLowerCase().contains("yes") || input.toLowerCase().contains("true") || input.toLowerCase().contains("docker")) {
+        String lowerCaseInput = input.toLowerCase();
+        if (lowerCaseInput.contains("yes") || lowerCaseInput.contains("true") || lowerCaseInput.contains("docker")) {
             return true;
         }
-        if (input.toLowerCase().contains("no") || input.toLowerCase().contains("false")) {
+        if (lowerCaseInput.contains("no") || lowerCaseInput.contains("false")) {
             return false;
         }
         throw new IllegalArgumentException("Unsupported Docker flag: " + input);
     }
 
     public static String normalizeRuntime(String input) {
-        if (input.toLowerCase().contains("glassfish")) return "glassfish";
-        if (input.toLowerCase().contains("open liberty") || input.toLowerCase().contains("liberty"))
-            return "open-liberty";
-        if (input.toLowerCase().contains("payara")) return "payara";
-        if (input.toLowerCase().contains("tomee")) return "tomee";
-        if (input.toLowerCase().contains("wildfly") || input.toLowerCase().contains("wild-fly")) return "wildfly";
-        if (input.toLowerCase().contains("none")) return "none";
+        String lowerCaseInput = input.toLowerCase();
+        if (lowerCaseInput.contains("glassfish")) return "glassfish";
+        if (lowerCaseInput.contains("open liberty") || lowerCaseInput.contains("liberty")) return "open-liberty";
+        if (lowerCaseInput.contains("payara")) return "payara";
+        if (lowerCaseInput.contains("tomee")) return "tomee";
+        if (lowerCaseInput.contains("wildfly") || lowerCaseInput.contains("wild-fly")) return "wildfly";
+        if (lowerCaseInput.contains("none")) return "none";
         throw new IllegalArgumentException("Unsupported runtime: " + input);
     }
 
