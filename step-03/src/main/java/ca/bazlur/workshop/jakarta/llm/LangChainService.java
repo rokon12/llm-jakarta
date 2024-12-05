@@ -1,6 +1,7 @@
 package ca.bazlur.workshop.jakarta.llm;
 
 import ca.bazlur.workshop.jakarta.llm.tools.JakartaEEProjectGeneratorTool;
+import ca.bazlur.workshop.jakarta.llm.tools.WebPageTool;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
@@ -35,7 +36,7 @@ public class LangChainService {
         jakartaEEAgent = AiServices
                 .builder(JakartaEEAgent.class)
                 .streamingChatLanguageModel(chatModel)
-                .tools(new JakartaEEProjectGeneratorTool())
+                .tools(new JakartaEEProjectGeneratorTool(), new WebPageTool())
                 .chatMemory(MessageWindowChatMemory.builder().maxMessages(config.getMaxMemorySize()).build())
                 .build();
     }

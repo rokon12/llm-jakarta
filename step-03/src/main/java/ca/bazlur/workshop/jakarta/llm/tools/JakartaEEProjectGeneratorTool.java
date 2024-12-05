@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.util.Base64;
 import java.util.Map;
@@ -137,7 +138,7 @@ public class JakartaEEProjectGeneratorTool {
                 return Base64.getEncoder().encodeToString(cachedDirectory.getBytes());
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to generate zip.", e);
+            throw new UncheckedIOException("Failed to generate zip.", e);
         }
     }
 
