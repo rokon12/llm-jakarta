@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+<h:head>
+    <title>Welcome to Jakarta EE Chatbot</title>
+    <link rel="stylesheet" href="#{request.contextPath}/resources/css/chat.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="#{request.contextPath}/resources/js/chat.js"></script>
+    <script>
+        function toggleChat() {
+            const chatContainer = document.getElementById("chat-container");
+            chatContainer.style.display = chatContainer.style.display === "none" ? "flex" : "none";
+
+            if (chatContainer.style.display === "flex" &amp;&amp; (!socket || socket.readyState !== WebSocket.OPEN)) {
+                connect();
+            }
+        }
+
+        window.onload = function () {
+            const messageInput = document.getElementById("message-input");
+            messageInput.addEventListener("keypress", function (event) {
+                if (event.key === "Enter") {
+                    sendMessage(); // Send message when "Enter" is pressed
+                    event.preventDefault(); // Prevent default form submission
+                }
+            });
+        };
+    </script>
+</h:head>
+<h:body>
+    <!-- Main Page Welcome Message -->
+    <div class="main-page-content">
+        <img src="#{request.contextPath}/resources/images/jakartaee_logo.jpg" alt="Jakarta EE Logo"/>
+        <h1>Welcome to Jakarta EE AI Chatbot</h1>
+        <p>
+            This chatbot is here to help you learn about Jakarta EE technologies, answer your questions,
+            and provide guidance on how to get started. Feel free to click the chatbot icon at the bottom
+            of the page to start a conversation!
+        </p>
+    </div>
+    <!-- Chat Container -->
+    <div id="chat-container" class="chat-container" style="display: none;">
+        <div class="chat-header">
+            <img src="#{request.contextPath}/resources/images/jakartaee_logo.jpg" alt="Jakarta EE Logo"
+                 class="jakarta-logo"/>
+            <h1 class="chat-title">AI Chatbot</h1>
+            <button class="chat-minimize" onclick="toggleChat()">−</button>
+        </div>
+        <div id="error-bubble" class="error-bubble" style="display: none;">
+            Unable to connect to the chatbot. Please try again later.
+        </div>
+
+        <div id="chat-window" class="chat-window"></div>
+        <div class="chat-input-container">
+            <input id="message-input" class="chat-input" type="text" placeholder="Type your message here..."/>
+            <button class="chat-send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Chatbot Icon -->
+    <button class="chat-icon" onclick="toggleChat()">
+        💬
+    </button>
+</h:body>
+</html>
