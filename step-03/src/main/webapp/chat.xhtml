@@ -18,18 +18,18 @@
 
         window.onload = function () {
             const messageInput = document.getElementById("message-input");
-            messageInput.addEventListener("keypress", function (event) {
-                if (event.shiftKey){
-                    const input = document.getElementById("message-input");
-                    input.value += "\n";
-                }
-
+            messageInput.addEventListener("keydown", function (event) {
                 if (event.key === "Enter") {
-                    sendMessage(); // Send message when "Enter" is pressed
-                    event.preventDefault(); // Prevent default form submission
+                    event.preventDefault();
+                    if (event.shiftKey) {
+                        messageInput.value += "\n";
+                    } else {
+                        sendMessage();
+                    }
                 }
             });
         };
+
     </script>
 </h:head>
 <h:body>
@@ -57,7 +57,7 @@
 
         <div id="chat-window" class="chat-window"></div>
         <div class="chat-input-container">
-            <input id="message-input" class="chat-input" type="text" placeholder="Type your message here..."/>
+            <textarea id="message-input" class="chat-input"  placeholder="Type your message here..."/>
             <button class="chat-send-button" onclick="sendMessage()">Send</button>
         </div>
     </div>
