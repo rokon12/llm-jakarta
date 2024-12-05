@@ -19,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
 
+//This is a demo tool that generates a Jakarta EE project with customizable configurations.
+//This can be furhter enhanced to include more options and configurations
 @Slf4j
 public class JakartaEEProjectGeneratorTool {
     private static final String DEFAULT_GROUPID = "org.eclipse";
@@ -39,27 +41,23 @@ public class JakartaEEProjectGeneratorTool {
             @P("The Java SE version (e.g., 'Java SE 17', '17'). Extracts numerical values like '17'.") String javaVersion,
             @P("The runtime to use, mapped as follows: 'GlassFish' -> 'glassfish', 'Open Liberty' -> 'open-liberty', 'Payara' -> 'payara', 'TomEE' -> 'tomee', 'WildFly' -> 'wildfly'.") String runtime,
             @P("Whether Docker support is needed ('Yes', 'No'). Handles variations like 'docker support' or 'no docker'.") String docker,
-            @P("The Maven group ID (default: 'org.eclipse'). use default if not provided") String groupId,
+            @P("The Maven group ID (default: 'org.eclipse'). Use default if not provided.") String groupId,
             @P("The Maven artifact ID (default: 'jakartaee-hello-world'). Use default if not provided. Normalizes spaces into hyphens.") String artifactId) {
+
         log.info("Generating Jakarta EE project with the following parameters: jakartaVersion={}, profile={}, javaVersion={}, runtime={}, dockerSupport={}",
                 jakartaVersion, profile, javaVersion, runtime, docker);
         try {
-            if (jakartaVersion == null || jakartaVersion.isEmpty()) {
-                return "Which Jakarta EE version do you want? (e.g., Jakarta EE 10, Jakarta EE 9, Jakarta EE 8)";
+            if (groupId == null || groupId.isEmpty()) {
+                groupId = DEFAULT_GROUPID;
             }
-            if (profile == null || profile.isEmpty()) {
-                return "Which Jakarta EE profile do you want? (Platform, Web Profile, or Core Profile)";
-            }
-            if (javaVersion == null || javaVersion.isEmpty()) {
-                return "Which Java version do you want to use? (e.g., Java SE 17, Java SE 11)";
-            }
-            if (runtime == null || runtime.isEmpty()) {
-                return "Which runtime do you want? (None, WildFly, Open Liberty, Payara, TomEE, or GlassFish)";
-            }
-            if (docker == null || docker.isEmpty()) {
-                return "Do you need Docker support? (Yes or No)";
+            if (artifactId == null || artifactId.isEmpty()) {
+                artifactId = DEFAULT_ARTIFACTID;
             }
 
+            String missingInput = getMissingInputPrompt(jakartaVersion, profile, javaVersion, runtime, docker);
+            if (missingInput != null) {
+                return missingInput;
+            }
 
             profile = InputNormalizer.normalizeProfile(profile);
             int javaVersionInt = InputNormalizer.normalizeJavaVersion(javaVersion);
@@ -74,6 +72,25 @@ public class JakartaEEProjectGeneratorTool {
             log.error("Error generating Jakarta EE project", e);
             return "Error generating Jakarta EE project: " + e.getMessage();
         }
+    }
+
+    private String getMissingInputPrompt(String jakartaVersion, String profile, String javaVersion, String runtime, String docker) {
+        if (jakartaVersion == null || jakartaVersion.isEmpty()) {
+            return "Which Jakarta EE version do you want? (e.g., Jakarta EE 10, Jakarta EE 9, Jakarta EE 8)";
+        }
+        if (profile == null || profile.isEmpty()) {
+            return "Which Jakarta EE profile do you want? (Platform, Web Profile, or Core Profile)";
+        }
+        if (javaVersion == null || javaVersion.isEmpty()) {
+            return "Which Java version do you want to use? (e.g., Java SE 17, Java SE 11)";
+        }
+        if (runtime == null || runtime.isEmpty()) {
+            return "Which runtime do you want? (None, WildFly, Open Liberty, Payara, TomEE, or GlassFish)";
+        }
+        if (docker == null || docker.isEmpty()) {
+            return "Do you need Docker support? (Yes or No)";
+        }
+        return null;
     }
 
     public String generate(double jakartaVersion, String profile, int javaVersion, boolean dockerSupport, String runtime, String groupId, String artifactId) {
@@ -125,7 +142,13 @@ public class JakartaEEProjectGeneratorTool {
     }
 
     private String getCacheKey(double jakartaVersion, String profile, int javaVersion, boolean docker, String runtime, String groupId, String artifactId) {
-        return jakartaVersion + ":" + profile + ":" + javaVersion + ":" + docker + ":" + runtime + ":" + groupId + ":" + artifactId;
+        return String.join(":",
+                String.valueOf(jakartaVersion),
+                profile,
+                String.valueOf(javaVersion),
+                String.valueOf(docker),
+                runtime,
+                groupId,
+                artifactId);
     }
-
 }
