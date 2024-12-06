@@ -13,9 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
-import java.util.Base64;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Map.entry;
@@ -29,7 +27,14 @@ public class JakartaEEProjectGeneratorTool {
 
     private static final Map<String, String> cache = new ConcurrentHashMap<>();
 
-    @Tool("Generate a Jakarta EE project with customizable configurations. If any input is missing or unclear, the AI will request clarification step-by-step. After collecting and validating all inputs, the tool generates the project, zips it, and provides a download URL.")
+    @Tool("""
+            Generate a Jakarta EE project with customizable configurations. 
+            If any input is missing or unclear, request that input from the user step-by-step. 
+            Begin by asking for the Jakarta EE version first. 
+            Once the user provides it or clarifies it, proceed to ask for the profile, and so forth. 
+            Continue this pattern until all inputs are collected. 
+            Ensure each question is conversational, concise, and user-friendly. 
+            After collecting and validating all inputs, generate the project, zip it, and provide a download URL.""")
     public String generate(
             @P("The Jakarta EE version (e.g., 'Jakarta EE 10', '10'). Extracts numerical values like '10'.") String jakartaVersion,
             @P("""
@@ -74,6 +79,77 @@ public class JakartaEEProjectGeneratorTool {
             return "Error generating Jakarta EE project: " + e.getMessage();
         }
     }
+
+    @Tool("""
+                Validate or request a supported Jakarta EE version.
+                If the provided version is missing or unsupported, 
+                ask the user again, mentioning the supported versions.
+            """)
+    public String validateJakartaVersion(
+            @P("Proposed Jakarta EE version. Can be something like 'Jakarta EE 10' or '10'.") String proposedVersion
+    ) {
+        log.info("Validating Jakarta EE version: {}", proposedVersion);
+        List<String> supportedVersions = List.of(
+                "8",
+                "9",
+                "9.1",
+                "10"
+        );
+
+        String numericVersion = (proposedVersion != null && !proposedVersion.isEmpty()) ? proposedVersion.replaceAll("\\D+", "") : null;
+
+        if (numericVersion == null || numericVersion.isEmpty() || !supportedVersions.contains(numericVersion)) {
+            return "Which Jakarta EE version would you like to use? Currently supported: " + supportedVersions;
+        }
+
+        return numericVersion;
+    }
+
+    @Tool("""
+                This tool ensures a valid Jakarta EE profile is selected based on the chosen Jakarta version.
+                If profile is missing or invalid for the selected Jakarta version, it prompts the user again.
+            """)
+    public String validateProfile(
+            @P("Valid Jakarta EE version already selected") String jakartaVersion,
+            @P("Proposed profile (e.g., 'full', 'web', 'core').") String proposedProfile
+    ) {
+        log.info("Validating profile: {}", proposedProfile);
+
+        List<String> supportedProfiles = Arrays.asList("full", "web", "core");
+        if (!supportedProfiles.contains(proposedProfile)) {
+            return "Please select a valid profile: full, web, or core.";
+        }
+
+        if (!jakartaVersion.equals("10") && proposedProfile.equals("core")) {
+            return "The 'core' profile is not supported for Jakarta EE " + jakartaVersion + ". Please choose 'full' or 'web'.";
+        }
+
+        return proposedProfile;
+    }
+
+    @Tool("""
+                This tool validates the Java SE version selection.
+                If not provided or incompatible, it prompts the user accordingly.
+            """)
+    public String validateJavaVersion(
+            @P("Valid Jakarta EE version, Extracts numerical values e.g. 10") String jakartaVersion,
+            @P("Valid profile") String profile,
+            @P("Proposed Java SE version (e.g., '8', '11', '17').") String proposedJavaVersion
+    ) {
+        log.info("Validating Java SE version: {}, Jakarta EE version: {}, Profile: {}", proposedJavaVersion, jakartaVersion, profile);
+
+        List<String> allowedJavaVersions = List.of("8", "11", "17");
+        if (proposedJavaVersion == null || !allowedJavaVersions.contains(proposedJavaVersion)) {
+            return "Please select a supported Java SE version: " + allowedJavaVersions;
+        }
+
+        if (jakartaVersion.contains("10") && proposedJavaVersion.contains("8")) {
+            return "Java SE 8 is not supported for Jakarta EE 10. Please choose Java SE 11 or 17.";
+        }
+
+        return proposedJavaVersion;
+    }
+
 
     private String getMissingInputPrompt(String jakartaVersion, String profile, String javaVersion, String runtime, String docker) {
         if (jakartaVersion == null || jakartaVersion.isEmpty()) {
