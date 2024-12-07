@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-api:10.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.platform:jakarta.jakartaee-web-api:10.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.servlet:jakarta.servlet-api:6.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.servlet.jsp:jakarta.servlet.jsp-api:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.el:jakarta.el-api:5.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.ws.rs:jakarta.ws.rs-api:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.websocket:jakarta.websocket-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.websocket:jakarta.websocket-client-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.json:jakarta.json-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.json.bind:jakarta.json.bind-api:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.annotation:jakarta.annotation-api:2.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.ejb:jakarta.ejb-api:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.transaction:jakarta.transaction-api:2.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.persistence:jakarta.persistence-api:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.interceptor:jakarta.interceptor-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.enterprise:jakarta.enterprise.cdi-api:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.enterprise:jakarta.enterprise.lang-model:4.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.inject:jakarta.inject-api:2.0.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.authentication:jakarta.authentication-api:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.security.enterprise:jakarta.security.enterprise-api:3.0.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.jms:jakarta.jms-api:3.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.activation:jakarta.activation-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.mail:jakarta.mail-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.resource:jakarta.resource-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.authorization:jakarta.authorization-api:2.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.batch:jakarta.batch-api:2.1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: jakarta.faces:jakarta.faces-api:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.microprofile.config:microprofile-config-api:3.1" level="project" />
+    <orderEntry type="library" name="Maven: dev.langchain4j:langchain4j-open-ai:0.36.2" level="project" />
+    <orderEntry type="library" name="Maven: dev.langchain4j:langchain4j-core:0.36.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.10.1" level="project" />
+    <orderEntry type="library" name="Maven: dev.ai4j:openai4j:0.23.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:retrofit:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.retrofit2:converter-jackson:2.9.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.17.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.17.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.17.2" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.12.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:3.6.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio-jvm:3.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp-sse:4.12.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.25" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.9.25" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.25" level="project" />
+    <orderEntry type="library" name="Maven: com.knuddels:jtokkit:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: dev.langchain4j:langchain4j:0.36.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.opennlp:opennlp-tools:1.9.4" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.5.12" level="project" />
+    <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.5.12" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.16" level="project" />
+    <orderEntry type="library" name="Maven: org.tinylog:slf4j-tinylog:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tinylog:tinylog-api:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tinylog:tinylog-impl:2.7.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.36" level="project" />
+  </component>
+</module>
