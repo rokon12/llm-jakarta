@@ -1,6 +1,7 @@
 package ca.bazlur.workshop.jakarta.llm;
 
 import dev.langchain4j.data.message.AiMessage;
+import dev.langchain4j.memory.chat.ChatMemoryProvider;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
@@ -19,7 +20,7 @@ public class LangChainService {
     private JakartaEEAgent jakartaEEAgent;
 
     @Inject
-    public LangChainService(LangChain4JConfig config) {
+    public LangChainService(LangChain4JConfig config, PersistentChatMemoryStore chatMemoryStore) {
         var chatModel = OpenAiStreamingChatModel.builder()
                 .apiKey(config.getApiKey())
                 .modelName(config.getModelName())
@@ -31,17 +32,23 @@ public class LangChainService {
                 .logResponses(config.isLogResponses())
                 .build();
 
+        ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
+                .id(memoryId)
+                .chatMemoryStore(chatMemoryStore)
+                .maxMessages(config.getMaxMemorySize())
+                .build();
+
         jakartaEEAgent = AiServices
                 .builder(JakartaEEAgent.class)
                 .streamingChatLanguageModel(chatModel)
-                .chatMemory(MessageWindowChatMemory.builder().maxMessages(config.getMaxMemorySize()).build())
+                .chatMemoryProvider(chatMemoryProvider)
                 .build();
     }
 
     public void sendMessage(String userId, String message, Consumer<String> consumer) {
         log.info("User {} message: {}", userId, message);
 
-        jakartaEEAgent.chat(message)
+        jakartaEEAgent.chat(userId, message)
                 .onNext(consumer::accept)
                 .onComplete((Response<AiMessage> response) -> consumer.accept("[END]"))
                 .onError((Throwable throwable) -> {

@@ -1,7 +1,6 @@
 package ca.bazlur.workshop.jakarta.llm;
 
-import dev.langchain4j.service.SystemMessage;
-import dev.langchain4j.service.TokenStream;
+import dev.langchain4j.service.*;
 
 import java.io.Serializable;
 
@@ -14,5 +13,5 @@ public interface JakartaEEAgent extends Serializable {
             Your goal is to assist users in understanding Jakarta EE and solving their problems efficiently while maintaining a professional and approachable demeanor.
             Always ensure your answers are accurate, helpful, and focused on Jakarta EE.
             """)
-    TokenStream chat(String message);
+    TokenStream chat(@MemoryId String memoryId, @UserMessage String message);
 }

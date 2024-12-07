@@ -4,12 +4,27 @@ let currentStreamingMessage = null; // Track the current bot message bubble
 let markdownBuffer = ""; // Buffer to hold Markdown fragments during streaming
 
 function getUserId() {
-    let userId = localStorage.getItem("userId");
+    let userId = getCookie("userId");
     if (!userId) {
-        userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
-        localStorage.setItem("userId", userId);
+        const browserInfo = navigator.userAgentData ?
+            JSON.stringify(navigator.userAgentData) :
+            navigator.userAgent;
+        userId = `user-${btoa(browserInfo).substring(0, 12)}`;
+        setCookie("userId", userId, 365);
     }
     return userId;
+}
+
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+}
+
+function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=');
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r;
+    }, '');
 }
 
 function connect() {

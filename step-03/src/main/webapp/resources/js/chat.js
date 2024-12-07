@@ -3,15 +3,6 @@ let typingIndicator;
 let currentStreamingMessage = null; // Track the current bot message bubble
 let markdownBuffer = ""; // Buffer to hold Markdown fragments during streaming
 
-function getUserId() {
-    let userId = localStorage.getItem("userId");
-    if (!userId) {
-        userId = `user-${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
-        localStorage.setItem("userId", userId);
-    }
-    return userId;
-}
-
 function connect() {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
     const host = window.location.host;
