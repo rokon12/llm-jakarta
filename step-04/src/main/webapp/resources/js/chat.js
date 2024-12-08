@@ -2,6 +2,9 @@ let socket;
 let typingIndicator;
 let currentStreamingMessage = null; // Track the current bot message bubble
 let markdownBuffer = ""; // Buffer to hold Markdown fragments during streaming
+let retryCount = 0;
+const maxRetries = 5;
+const retryDelay = 2000; // 2 seconds
 
 function getUserId() {
     let userId = getCookie("userId");
@@ -60,6 +63,13 @@ function connect() {
             console.log("Disconnected from WebSocket");
             hideTypingIndicator();
             showErrorBubble("The connection to the chatbot has been closed. Please refresh the page to reconnect.");
+
+            if (retryCount < maxRetries) {
+                retryCount++;
+                setTimeout(connect, retryDelay);
+            } else {
+                showErrorBubble("Unable to reconnect to the chatbot after multiple attempts. Please try again later.");
+            }
         };
 
         socket.onerror = function (error) {

@@ -24,7 +24,7 @@ public class ApplicationStartupBean {
     @PostConstruct
     public void init() {
         log.info("Application started successfully.");
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments("documents/");
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments("/Users/bazlur/playground/llm-jakarta/step-04/documents");
         embeddingStore = new InMemoryEmbeddingStore<>();
         EmbeddingStoreIngestor.ingest(documents, embeddingStore);
     }
