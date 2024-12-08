@@ -24,6 +24,8 @@
         <payara.version>6.2024.11</payara.version>
         <cargo.version>1.10.15</cargo.version>
         <apache-tika.version>2.9.1</apache-tika.version>
+        <wildfly.version>33.0.2.Final</wildfly.version>
+        <wildfly-plugin.version>5.0.1.Final</wildfly-plugin.version>
     </properties>
 
     <dependencies>
@@ -106,24 +108,6 @@
             <version>1.18.1</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>dev.langchain4j</groupId>-->
-        <!--            <artifactId>langchain4j-easy-rag</artifactId>-->
-        <!--            <version>0.36.2</version>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tika</groupId>-->
-        <!--            <artifactId>tika-core</artifactId>-->
-        <!--            <version>${apache-tika.version}</version>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.tika</groupId>-->
-        <!--            <artifactId>tika-parsers-standard-package</artifactId>-->
-        <!--            <version>${apache-tika.version}</version>-->
-        <!--        </dependency>-->
-
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-pgvector</artifactId>
@@ -164,20 +148,14 @@
                 </configuration>
             </plugin>
 
-            <!-- Execute 'mvn clean package cargo:run' to run the application. -->
+            <!-- Execute 'mvn clean package wildfly:dev' to run the application. -->
             <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven3-plugin</artifactId>
-                <version>${cargo.version}</version>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${wildfly-plugin.version}</version>
                 <configuration>
-                    <container>
-                        <containerId>payara</containerId>
-                        <artifactInstaller>
-                            <groupId>fish.payara.distributions</groupId>
-                            <artifactId>payara</artifactId>
-                            <version>${payara.version}</version>
-                        </artifactInstaller>
-                    </container>
+                    <version>${wildfly.version}</version>
+                    <server-config>standalone-full.xml</server-config>
                 </configuration>
             </plugin>
         </plugins>
