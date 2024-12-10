@@ -156,6 +156,9 @@
                 <configuration>
                     <version>${wildfly.version}</version>
                     <server-config>standalone-full.xml</server-config>
+                    <scripts>
+                        <script>scripts/configure-postgresql.cli</script>
+                    </scripts>
                 </configuration>
             </plugin>
         </plugins>
