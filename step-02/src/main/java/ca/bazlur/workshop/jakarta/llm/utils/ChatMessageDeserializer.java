@@ -29,7 +29,6 @@ public class ChatMessageDeserializer {
     }
 
     public static List<ChatMessage> messagesFromJson(String json) {
-        log.info("Deserializing messages: {}", json);
         try {
             return objectMapper.readValue(json, new TypeReference<>() {
             });

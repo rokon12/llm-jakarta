@@ -1,12 +1,12 @@
 package ca.bazlur.workshop.jakarta.llm;
 
-import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.ChatMessageType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.time.Instant;
 
@@ -24,10 +24,7 @@ public class ChatMessageEntity {
 
     private String memoryId;
 
-    @Enumerated(EnumType.STRING)
-    private ChatMessageType type;
-
-    @Lob
+    @Column(columnDefinition = "jsonb")
     private String message;
 
     private Instant createdDate;
