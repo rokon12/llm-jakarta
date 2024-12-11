@@ -46,7 +46,7 @@ public class StartupBean {
             log.error("Failed to establish connection: {}", e.getMessage());
         }
 
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments("/Users/bazlur/playground/llm-jakarta/step-05/documents", new ApacheTikaDocumentParser());
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments("documents", new ApacheTikaDocumentParser());
         log.info("Total documents parsed: {}", documents.size());
 
         documents.stream()
