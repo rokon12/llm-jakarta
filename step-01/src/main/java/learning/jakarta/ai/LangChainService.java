@@ -1,13 +1,13 @@
 package learning.jakarta.ai;
 
 import dev.langchain4j.data.message.AiMessage;
-import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.service.AiServices;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import learning.jakarta.ai.prompts.Personality;
+import learning.jakarta.ai.prompts.JavaChampion;
 import learning.jakarta.ai.prompts.Poet;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +18,16 @@ import java.util.function.Consumer;
 @ApplicationScoped
 @NoArgsConstructor
 public class LangChainService {
-    private OpenAiStreamingChatModel chatModel;
 
-    Personality personality = null;
+    private JavaChampion personality = null;
+
     @Inject
-    public LangChainService(LangChain4JConfig config) {
-        chatModel = OpenAiStreamingChatModel.builder()
+    LangChain4JConfig config;
+
+    @Inject
+    @PostConstruct
+    public void init() {
+        OpenAiStreamingChatModel chatModel = OpenAiStreamingChatModel.builder()
                 .apiKey(config.getApiKey())
                 .modelName(config.getModelName())
                 .temperature(config.getTemperature())
@@ -33,36 +37,24 @@ public class LangChainService {
                 .logRequests(config.isLogRequests())
                 .logResponses(config.isLogResponses())
                 .build();
-
         // Add system prompt
-        personality = AiServices.create(Personality.class, chatModel);
+        personality = AiServices.builder(JavaChampion.class).streamingChatLanguageModel(chatModel).build();
 
     }
 
-
     public void sendMessage(String message, Consumer<String> consumer) {
         log.info("User message: {}", message);
-        chatModel.generate(message, new StreamingResponseHandler<>() {
-            @Override
-            public void onNext(String s) {
-                consumer.accept(s);
-            }
 
-            @Override
-            public void onComplete(Response<AiMessage> response) {
-                consumer.accept("[END]");
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                log.error("Error occurred: {}", throwable.getMessage());
-            }
-        });
+        personality.getUserText(message, 5)
+                .onNext(consumer::accept)
+                .onComplete((Response<AiMessage> response) -> consumer.accept("[END]"))
+                .onError((Throwable throwable) -> {
+                    log.error("Error processing message", throwable);
+                    consumer.accept("Sorry, I am unable to process your message at this time. Please try again later.");
+                }).start();
     }
 
     public String getPersonalitySystemPrompt(){
         return personality.SYSTEM_PROMPT;
     }
-
-
 }

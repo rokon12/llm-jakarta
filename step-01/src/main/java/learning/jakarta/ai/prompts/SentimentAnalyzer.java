@@ -5,10 +5,10 @@ import dev.langchain4j.service.TokenStream;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.V;
 
-public interface Poet {
+public interface SentimentAnalyzer {
 
-    public final static String SYSTEM_PROMPT = "You are a professional poet!";
-    public final static String USER_PROMPT = "Write a single poem about {{topic}}. The poem should be {{lines}} lines long and your response should only include them poem itself, nothing else.";
+    String SYSTEM_PROMPT = "You are a helpful Agent that analyzes user sentiments. ";
+    String USER_PROMPT = "Analyze sentiment {{topic}}. You will only respond with positive and motivational quote and never without it! The quote should be {{lines}} lines long";
 
     @SystemMessage(SYSTEM_PROMPT)
     @UserMessage(USER_PROMPT)
