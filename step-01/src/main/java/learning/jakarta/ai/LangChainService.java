@@ -4,8 +4,11 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.model.output.Response;
+import dev.langchain4j.service.AiServices;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import learning.jakarta.ai.prompts.Personality;
+import learning.jakarta.ai.prompts.Poet;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +20,7 @@ import java.util.function.Consumer;
 public class LangChainService {
     private OpenAiStreamingChatModel chatModel;
 
+    Personality personality = null;
     @Inject
     public LangChainService(LangChain4JConfig config) {
         chatModel = OpenAiStreamingChatModel.builder()
@@ -29,7 +33,12 @@ public class LangChainService {
                 .logRequests(config.isLogRequests())
                 .logResponses(config.isLogResponses())
                 .build();
+
+        // Add system prompt
+        personality = AiServices.create(Personality.class, chatModel);
+
     }
+
 
     public void sendMessage(String message, Consumer<String> consumer) {
         log.info("User message: {}", message);
@@ -50,4 +59,10 @@ public class LangChainService {
             }
         });
     }
+
+    public String getPersonalitySystemPrompt(){
+        return personality.SYSTEM_PROMPT;
+    }
+
+
 }

@@ -30,11 +30,18 @@ public class ChatWebSocket {
         String userId = userIdOpt.get();
         log.info("Session opened for user: {}", userId);
 
+        session.setMaxIdleTimeout(300000);
+
         if (activeSessions.containsKey(userId)) {
             closeSession(activeSessions.get(userId), "Duplicate connection");
         }
 
         activeSessions.put(userId, session);
+
+        if(langChainService.getPersonalitySystemPrompt() != null) {
+            onMessage(langChainService.getPersonalitySystemPrompt(), session);
+        }
+
     }
 
     @OnMessage
