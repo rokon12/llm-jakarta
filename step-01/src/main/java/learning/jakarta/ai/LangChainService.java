@@ -42,13 +42,14 @@ public class LangChainService {
 
         log.info("Personality type: {}", config.getPersonalityType());
         personality = switch (config.getPersonalityType()) {
-            case "JavaChampion" -> AiServices.builder(JavaChampion.class).streamingChatLanguageModel(chatModel).build();
-            case "Poet" -> AiServices.builder(Poet.class).streamingChatLanguageModel(chatModel).build();
-            case "SentimentAnalyzer" ->
-                    AiServices.builder(SentimentAnalyzer.class).streamingChatLanguageModel(chatModel).build();
-            default -> throw new IllegalArgumentException("Unknown personality type: " + config.getPersonalityType());
+            case JAVA_CHAMPION -> createPersonality(JavaChampion.class, chatModel);
+            case POET -> createPersonality(Poet.class, chatModel);
+            case SENTIMENT_ANALYZER -> createPersonality(SentimentAnalyzer.class, chatModel);
         };
+    }
 
+    private <T extends Personality> T createPersonality(Class<T> clazz, OpenAiStreamingChatModel chatModel) {
+        return AiServices.builder(clazz).streamingChatLanguageModel(chatModel).build();
     }
 
     public void sendMessage(String message, Consumer<String> consumer) {
