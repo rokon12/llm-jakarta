@@ -8,7 +8,9 @@ import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import learning.jakarta.ai.prompts.JavaChampion;
+import learning.jakarta.ai.prompts.Personality;
 import learning.jakarta.ai.prompts.Poet;
+import learning.jakarta.ai.prompts.SentimentAnalyzer;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +21,7 @@ import java.util.function.Consumer;
 @NoArgsConstructor
 public class LangChainService {
 
-    private JavaChampion personality = null;
+    private Personality personality = null;
 
     @Inject
     LangChain4JConfig config;
@@ -37,8 +39,15 @@ public class LangChainService {
                 .logRequests(config.isLogRequests())
                 .logResponses(config.isLogResponses())
                 .build();
-        // Add system prompt
-        personality = AiServices.builder(JavaChampion.class).streamingChatLanguageModel(chatModel).build();
+
+        log.info("Personality type: {}", config.getPersonalityType());
+        personality = switch (config.getPersonalityType()) {
+            case "JavaChampion" -> AiServices.builder(JavaChampion.class).streamingChatLanguageModel(chatModel).build();
+            case "Poet" -> AiServices.builder(Poet.class).streamingChatLanguageModel(chatModel).build();
+            case "SentimentAnalyzer" ->
+                    AiServices.builder(SentimentAnalyzer.class).streamingChatLanguageModel(chatModel).build();
+            default -> throw new IllegalArgumentException("Unknown personality type: " + config.getPersonalityType());
+        };
 
     }
 
@@ -54,7 +63,11 @@ public class LangChainService {
                 }).start();
     }
 
-    public String getPersonalitySystemPrompt(){
-        return personality.SYSTEM_PROMPT;
+    public String getPersonalitySystemPrompt() {
+        return switch (personality) {
+            case JavaChampion ignored -> JavaChampion.SYSTEM_PROMPT;
+            case Poet ignored -> Poet.SYSTEM_PROMPT;
+            case SentimentAnalyzer ignored -> SentimentAnalyzer.SYSTEM_PROMPT;
+        };
     }
 }

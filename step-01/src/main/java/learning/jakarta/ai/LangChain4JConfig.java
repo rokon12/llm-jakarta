@@ -41,5 +41,9 @@ public class LangChain4JConfig {
     @ConfigProperty(name = "langchain4j.open-ai.chat-model.log-responses")
     private boolean logResponses;
 
+    @Inject
+    @ConfigProperty(name = "langchain4j.personality-type")
+    private String personalityType;
+
 }
 
