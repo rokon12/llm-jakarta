@@ -6,6 +6,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @ServerEndpoint("/chat")
 public class ChatWebSocket {
+    private static final Duration MAX_IDLE_TIMEOUT = Duration.ofMinutes(5);
+
     private static final Map<String, Session> activeSessions = new ConcurrentHashMap<>();
 
     @Inject
@@ -29,6 +32,8 @@ public class ChatWebSocket {
 
         String userId = userIdOpt.get();
         log.info("Session opened for user: {}", userId);
+        session.setMaxIdleTimeout(MAX_IDLE_TIMEOUT.toMillis());
+
         activeSessions.put(userId, session);
         log.info("Session registered for userId: {}", userId);
         sendMessage(session, """
