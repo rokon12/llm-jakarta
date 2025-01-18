@@ -25,6 +25,8 @@ import java.util.List;
 public class StartupBean {
 
     @Inject
+    private ConfigProp config;
+    @Inject
     private EmbeddingModel embeddingModel;
     @Inject
     private PgVectorEmbeddingStore pgVectorStore;
@@ -46,7 +48,7 @@ public class StartupBean {
             log.error("Failed to establish connection: {}", e.getMessage());
         }
 
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments("documents", new ApacheTikaDocumentParser());
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments(config.getDocumentsDir(), new ApacheTikaDocumentParser());
         log.info("Total documents parsed: {}", documents.size());
 
         documents.stream()

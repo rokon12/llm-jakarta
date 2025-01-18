@@ -44,5 +44,9 @@ public class ConfigProp {
     @Inject
     @ConfigProperty(name = "langchain4j.open-ai.chat-model.max-memory-size")
     private int maxMemorySize;
+
+    @Inject
+    @ConfigProperty(name = "llm-jakarta.documents-dir")
+    private String documentsDir;
 }
 
