@@ -10,6 +10,7 @@ import jakarta.ejb.Singleton;
 import jakarta.ejb.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -21,10 +22,13 @@ public class ApplicationStartupBean {
 
     private InMemoryEmbeddingStore<TextSegment> embeddingStore;
 
+    @Inject
+    LangChain4JConfig config;
+
     @PostConstruct
     public void init() {
         log.info("Application started successfully.");
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments("/Users/bazlur/playground/llm-jakarta/step-04/documents");
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments(config.getDocumentsDir());
         embeddingStore = new InMemoryEmbeddingStore<>();
         EmbeddingStoreIngestor.ingest(documents, embeddingStore);
     }
