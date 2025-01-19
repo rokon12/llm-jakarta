@@ -38,6 +38,12 @@ This Jakarta EE AI Chatbot is designed to help users learn about Jakarta EE tech
    ```
    http://localhost:8080/llm-jakarta
    ```
+5. **Additional Step for RAG Feature (Step 04-06)**: When leveraging the RAG (Retrieval-Augmented Generation) feature, you must specify the directory containing the documents by exporting the following variable
+
+ ```shell
+ export LLM_JAKARTA_DOCUMENTS_DIR=<document_dir>
+ ```
+Replace `<document_dir>` with the path to your documents directory.
 
 ---
 
