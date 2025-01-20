@@ -45,6 +45,12 @@ This Jakarta EE AI Chatbot is designed to help users learn about Jakarta EE tech
  ```
 Replace `<document_dir>` with the path to your documents directory.
 
+**Some of the steps require a database.** To simplify we have added a docker-compose.yml in the "deploy" directory.
+ ```shell
+ docker-compose up
+ ```
+
+
 ---
 
 ## Screenshots
