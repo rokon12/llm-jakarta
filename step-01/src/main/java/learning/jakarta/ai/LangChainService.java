@@ -7,10 +7,7 @@ import dev.langchain4j.service.AiServices;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import learning.jakarta.ai.prompts.JavaChampion;
-import learning.jakarta.ai.prompts.Personality;
-import learning.jakarta.ai.prompts.Poet;
-import learning.jakarta.ai.prompts.ChainOfThought;
+import learning.jakarta.ai.prompts.*;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +42,7 @@ public class LangChainService {
             case JAVA_CHAMPION -> createPersonality(JavaChampion.class, chatModel);
             case POET -> createPersonality(Poet.class, chatModel);
             case CHAIN_OF_THOUGHT -> createPersonality(ChainOfThought.class, chatModel);
+            case MOVIE_SUMMARIZER -> createPersonality(MovieSummarizer.class, chatModel);
         };
     }
 
@@ -69,6 +67,7 @@ public class LangChainService {
             case JavaChampion ignored -> JavaChampion.SYSTEM_PROMPT;
             case Poet ignored -> Poet.SYSTEM_PROMPT;
             case ChainOfThought ignored -> ChainOfThought.SYSTEM_PROMPT;
+            case MovieSummarizer ignored -> MovieSummarizer.SYSTEM_PROMPT;
         };
     }
 }
