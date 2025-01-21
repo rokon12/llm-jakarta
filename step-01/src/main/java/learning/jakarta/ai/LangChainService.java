@@ -10,7 +10,7 @@ import jakarta.inject.Inject;
 import learning.jakarta.ai.prompts.JavaChampion;
 import learning.jakarta.ai.prompts.Personality;
 import learning.jakarta.ai.prompts.Poet;
-import learning.jakarta.ai.prompts.SentimentAnalyzer;
+import learning.jakarta.ai.prompts.ChainOfThought;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,7 +44,7 @@ public class LangChainService {
         personality = switch (config.getPersonalityType()) {
             case JAVA_CHAMPION -> createPersonality(JavaChampion.class, chatModel);
             case POET -> createPersonality(Poet.class, chatModel);
-            case SENTIMENT_ANALYZER -> createPersonality(SentimentAnalyzer.class, chatModel);
+            case CHAIN_OF_THOUGHT -> createPersonality(ChainOfThought.class, chatModel);
         };
     }
 
@@ -55,7 +55,7 @@ public class LangChainService {
     public void sendMessage(String message, Consumer<String> consumer) {
         log.info("User message: {}", message);
 
-        personality.getUserText(message, 5)
+        personality.getUserText(message)
                 .onNext(consumer::accept)
                 .onComplete((Response<AiMessage> response) -> consumer.accept("[END]"))
                 .onError((Throwable throwable) -> {
@@ -68,7 +68,7 @@ public class LangChainService {
         return switch (personality) {
             case JavaChampion ignored -> JavaChampion.SYSTEM_PROMPT;
             case Poet ignored -> Poet.SYSTEM_PROMPT;
-            case SentimentAnalyzer ignored -> SentimentAnalyzer.SYSTEM_PROMPT;
+            case ChainOfThought ignored -> ChainOfThought.SYSTEM_PROMPT;
         };
     }
 }
