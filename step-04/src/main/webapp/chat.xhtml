@@ -30,6 +30,10 @@
             });
         };
 
+        function toggleFullScreen() {
+            const chatContainer = document.getElementById("chat-container");
+            chatContainer.classList.toggle("fullscreen");
+        }
     </script>
 </h:head>
 <h:body>
@@ -50,6 +54,7 @@
                  class="jakarta-logo"/>
             <h1 class="chat-title">AI Chatbot</h1>
             <button class="chat-minimize" onclick="toggleChat()">−</button>
+            <button class="chat-fullscreen" onclick="toggleFullScreen()">⤢</button>
         </div>
         <div id="error-bubble" class="error-bubble" style="display: none;">
             Unable to connect to the chatbot. Please try again later.

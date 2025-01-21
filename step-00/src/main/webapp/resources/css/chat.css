@@ -30,11 +30,11 @@
 
 /* General container styles */
 .chat-container {
-    width: 400px; /* Width of the chat window */
-    height: 500px; /* Height of the chat window */
+    width: 90%; /* Default width for smaller screens */
+    height: 70%; /* Default height for smaller screens */
     position: fixed; /* Fixed position for floating effect */
-    bottom: 80px; /* Distance from the bottom of the screen */
-    right: 20px; /* Distance from the right of the screen */
+    bottom: 20px; /* Distance from the bottom of the screen */
+    right: 10px; /* Distance from the right of the screen */
     border: 1px solid #ddd;
     border-radius: 15px;
     background-color: #fdfdfd;
@@ -44,6 +44,49 @@
     flex-direction: column;
     overflow: hidden;
     z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Larger screens */
+@media (min-width: 768px) {
+    .chat-container {
+        width: 500px; /* Width of the chat window */
+        height: 750px; /* Height of the chat window */
+        bottom: 80px; /* Distance from the bottom of the screen */
+        right: 20px; /* Distance from the right of the screen */
+    }
+}
+
+.chat-container.fullscreen {
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    width: calc(100% - 40px) !important;
+    height: calc(100% - 40px) !important;
+    border-radius: 15px !important; /* Keep the rounded corners */
+    background-color: #fdfdfd;      /* Ensure the background is visible */
+    z-index: 9999 !important;      /* Keep it above other elements */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Make it look more “floating” */
+}
+
+.chat-fullscreen {
+    position: absolute; /* or relative if you prefer */
+    top: 10px;
+    right: 45px;
+    background-color: transparent;
+    color: #1b52a0; /* Jakarta EE blue */
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s;
+}
+.chat-fullscreen:hover {
+    color: #14427a;
+}
+.chat-fullscreen:active {
+    color: #ffd700;
 }
 
 /* Header styles */

@@ -27,7 +27,6 @@
     max-width: 300px;
     height: auto;
 }
-
 /* General container styles */
 .chat-container {
     width: 90%; /* Default width for smaller screens */
@@ -54,6 +53,39 @@
         bottom: 80px; /* Distance from the bottom of the screen */
         right: 20px; /* Distance from the right of the screen */
     }
+}
+
+.chat-container.fullscreen {
+    top: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    width: calc(100% - 40px) !important;
+    height: calc(100% - 40px) !important;
+    border-radius: 15px !important; /* Keep the rounded corners */
+    background-color: #fdfdfd;      /* Ensure the background is visible */
+    z-index: 9999 !important;      /* Keep it above other elements */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Make it look more “floating” */
+}
+
+.chat-fullscreen {
+    position: absolute; /* or relative if you prefer */
+    top: 10px;
+    right: 45px;
+    background-color: transparent;
+    color: #1b52a0; /* Jakarta EE blue */
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.3s;
+}
+.chat-fullscreen:hover {
+    color: #14427a;
+}
+.chat-fullscreen:active {
+    color: #ffd700;
 }
 
 /* Header styles */
