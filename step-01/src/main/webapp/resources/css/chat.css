@@ -30,11 +30,11 @@
 
 /* General container styles */
 .chat-container {
-    width: 400px; /* Width of the chat window */
-    height: 500px; /* Height of the chat window */
+    width: 90%; /* Default width for smaller screens */
+    height: 70%; /* Default height for smaller screens */
     position: fixed; /* Fixed position for floating effect */
-    bottom: 80px; /* Distance from the bottom of the screen */
-    right: 20px; /* Distance from the right of the screen */
+    bottom: 20px; /* Distance from the bottom of the screen */
+    right: 10px; /* Distance from the right of the screen */
     border: 1px solid #ddd;
     border-radius: 15px;
     background-color: #fdfdfd;
@@ -44,6 +44,16 @@
     flex-direction: column;
     overflow: hidden;
     z-index: 1000; /* Ensure it stays on top */
+}
+
+/* Larger screens */
+@media (min-width: 768px) {
+    .chat-container {
+        width: 500px; /* Width of the chat window */
+        height: 750px; /* Height of the chat window */
+        bottom: 80px; /* Distance from the bottom of the screen */
+        right: 20px; /* Distance from the right of the screen */
+    }
 }
 
 /* Header styles */
