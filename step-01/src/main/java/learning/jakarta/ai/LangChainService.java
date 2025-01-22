@@ -43,6 +43,7 @@ public class LangChainService {
             case POET -> createPersonality(Poet.class, chatModel);
             case CHAIN_OF_THOUGHT -> createPersonality(ChainOfThought.class, chatModel);
             case MOVIE_SUMMARIZER -> createPersonality(MovieSummarizer.class, chatModel);
+            case TREE_OF_THOUGHT -> createPersonality(TreeOfThought.class, chatModel);
         };
     }
 
@@ -68,6 +69,7 @@ public class LangChainService {
             case Poet ignored -> Poet.SYSTEM_PROMPT;
             case ChainOfThought ignored -> ChainOfThought.SYSTEM_PROMPT;
             case MovieSummarizer ignored -> MovieSummarizer.SYSTEM_PROMPT;
+            case TreeOfThought ignored -> TreeOfThought.SYSTEM_PROMPT;
         };
     }
 }

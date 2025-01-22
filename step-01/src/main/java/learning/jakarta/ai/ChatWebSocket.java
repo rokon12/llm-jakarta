@@ -6,6 +6,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/chat")
 public class ChatWebSocket {
     private static final Map<String, Session> activeSessions = new ConcurrentHashMap<>();
+    private final static Duration MAX_IDLE_TIMEOUT = Duration.ofMinutes(5);
 
     @Inject
     private LangChainService langChainService;
@@ -30,7 +32,7 @@ public class ChatWebSocket {
         String userId = userIdOpt.get();
         log.info("Session opened for user: {}", userId);
 
-        session.setMaxIdleTimeout(300000);
+        session.setMaxIdleTimeout(MAX_IDLE_TIMEOUT.toMillis());
 
         if (activeSessions.containsKey(userId)) {
             closeSession(activeSessions.get(userId), "Duplicate connection");
@@ -38,7 +40,7 @@ public class ChatWebSocket {
 
         activeSessions.put(userId, session);
 
-        if(langChainService.getPersonalitySystemPrompt() != null) {
+        if (langChainService.getPersonalitySystemPrompt() != null) {
             onMessage(langChainService.getPersonalitySystemPrompt(), session);
         }
 
