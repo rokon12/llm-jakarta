@@ -87,10 +87,7 @@ function createNewBotBubble() {
 function appendToStreamingBuffer(textFragment) {
     if (currentStreamingMessage) {
         markdownBuffer += textFragment;
-
-        currentStreamingMessage.innerHTML = markdownBuffer.endsWith(" ")
-            ? markdownBuffer
-            : markdownBuffer + " ";
+        currentStreamingMessage.innerHTML = marked.parse(markdownBuffer);
     }
 }
 
