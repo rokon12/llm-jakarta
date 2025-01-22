@@ -37,8 +37,6 @@ public class StartupBean {
     private EmbeddingModel embeddingModel;
     @Inject
     private PgVectorEmbeddingStore pgVectorStore;
-    @Inject
-    private DataSource dataSource;
 
     @PostConstruct
     public void init() {

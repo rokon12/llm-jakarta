@@ -22,5 +22,5 @@
     </root>
 
     <!-- Logger for specific package -->
-    <logger name="dev.langchain4j" level="INFO" additivity="false"/>
+    <logger name="dev.langchain4j" level="debug" additivity="false"/>
 </configuration>

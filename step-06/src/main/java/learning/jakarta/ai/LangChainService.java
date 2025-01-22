@@ -1,5 +1,13 @@
 package learning.jakarta.ai;
 
+import dev.langchain4j.memory.chat.ChatMemoryProvider;
+import dev.langchain4j.model.embedding.EmbeddingModel;
+import dev.langchain4j.rag.DefaultRetrievalAugmentor;
+import dev.langchain4j.rag.RetrievalAugmentor;
+import dev.langchain4j.rag.content.retriever.ContentRetriever;
+import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
+import dev.langchain4j.rag.query.transformer.DefaultQueryTransformer;
+import dev.langchain4j.rag.query.transformer.QueryTransformer;
 import learning.jakarta.ai.config.ConfigProp;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
@@ -19,10 +27,10 @@ import java.util.function.Consumer;
 @ApplicationScoped
 @NoArgsConstructor
 public class LangChainService {
-    private JakartaEEAgent jakartaEEAgent;
+    private AcademicResearchAssistant academicResearchAssistant;
 
     @Inject
-    public LangChainService(ConfigProp config, PgVectorEmbeddingStore embeddingStore) {
+    public LangChainService(ConfigProp config, PgVectorEmbeddingStore embeddingStore, EmbeddingModel embeddingModel, PersistentChatMemoryStore chatMemoryStore) {
         var chatModel = OpenAiStreamingChatModel.builder()
                 .apiKey(config.getApiKey())
                 .modelName(config.getModelName())
@@ -34,18 +42,35 @@ public class LangChainService {
                 .logResponses(config.isLogResponses())
                 .build();
 
-        jakartaEEAgent = AiServices
-                .builder(JakartaEEAgent.class)
+        var contentRetriever = EmbeddingStoreContentRetriever.builder()
+                .embeddingStore(embeddingStore)
+                .embeddingModel(embeddingModel)
+                .maxResults(5)
+                .minScore(0.75)
+                .build();
+
+        ChatMemoryProvider chatMemoryProvider = memoryId -> MessageWindowChatMemory.builder()
+                .id(memoryId)
+                .chatMemoryStore(chatMemoryStore)
+                .maxMessages(config.getMaxMemorySize())
+                .build();
+
+        RetrievalAugmentor retrievalAugmentor = DefaultRetrievalAugmentor.builder()
+                .queryTransformer(new DefaultQueryTransformer())
+                .contentRetriever(contentRetriever)
+                .build();
+
+        academicResearchAssistant = AiServices.builder(AcademicResearchAssistant.class)
                 .streamingChatLanguageModel(chatModel)
-                .chatMemory(MessageWindowChatMemory.builder().maxMessages(config.getMaxMemorySize()).build())
-                .contentRetriever(EmbeddingStoreContentRetriever.from(embeddingStore))
+                .chatMemoryProvider(chatMemoryProvider)
+                .retrievalAugmentor(retrievalAugmentor)
                 .build();
     }
 
     public void sendMessage(String userId, String message, Consumer<String> consumer) {
         log.info("User {} message: {}", userId, message);
 
-        jakartaEEAgent.chat(message)
+        academicResearchAssistant.chat(message)
                 .onNext(consumer::accept)
                 .onComplete((Response<AiMessage> response) -> consumer.accept("[END]"))
                 .onError((Throwable throwable) -> {
