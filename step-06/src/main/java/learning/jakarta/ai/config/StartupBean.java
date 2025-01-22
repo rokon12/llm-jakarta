@@ -1,15 +1,10 @@
 package learning.jakarta.ai.config;
 
 import dev.langchain4j.data.document.Document;
-import dev.langchain4j.data.document.DocumentSplitter;
 import dev.langchain4j.data.document.loader.FileSystemDocumentLoader;
 import dev.langchain4j.data.document.parser.apache.tika.ApacheTikaDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentByParagraphSplitter;
-import dev.langchain4j.data.document.splitter.DocumentSplitters;
-import dev.langchain4j.data.embedding.Embedding;
-import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiTokenizer;
 import dev.langchain4j.store.embedding.EmbeddingStoreIngestor;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 import jakarta.annotation.PostConstruct;
@@ -20,11 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
-
-import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_4_O_MINI;
+import java.util.Set;
 
 @Slf4j
 @Startup
@@ -38,24 +34,49 @@ public class StartupBean {
     @Inject
     private PgVectorEmbeddingStore pgVectorStore;
 
+    @Inject
+    private DataSource dataSource;
+
     @PostConstruct
     public void init() {
         log.info("Application started successfully.");
 
-        List<Document> documents = FileSystemDocumentLoader.loadDocuments(config.getDocumentsDir(), new ApacheTikaDocumentParser());
+        Set<String> existingFileNames = new HashSet<>();
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(
+                     "SELECT metadata->>'file_name' FROM embedding_store")) {
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    existingFileNames.add(resultSet.getString(1));
+                }
+            }
+        } catch (SQLException e) {
+            log.error("Error retrieving file names from the database", e);
+        }
+
+        List<Document> documents = FileSystemDocumentLoader.loadDocuments(
+                config.getDocumentsDir(),
+                new ApacheTikaDocumentParser());
         log.info("Total documents parsed: {}", documents.size());
 
-        DocumentByParagraphSplitter paragraphSplitter = new DocumentByParagraphSplitter(config.getMaxSegmentSizeInTokens(), config.getMaxOverlapSizeInTokens());
+        List<Document> newDocuments = documents.stream()
+                .filter(document -> !existingFileNames.contains(document.metadata().getString(Document.FILE_NAME)))
+                .toList();
 
-        EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
-                .documentSplitter(paragraphSplitter::split)
-                .textSegmentTransformer(textSegment -> TextSegment.from(
-                        textSegment.metadata().getString("file_name") + "\n" + textSegment.text(),
-                        textSegment.metadata()))
-                .embeddingModel(embeddingModel)
-                .embeddingStore(pgVectorStore)
-                .build();
+        if (!newDocuments.isEmpty()) {
+            DocumentByParagraphSplitter paragraphSplitter = new DocumentByParagraphSplitter(
+                    config.getMaxSegmentSizeInTokens(),
+                    config.getMaxOverlapSizeInTokens());
 
-        embeddingStoreIngestor.ingest(documents);
+            EmbeddingStoreIngestor embeddingStoreIngestor = EmbeddingStoreIngestor.builder()
+                    .documentSplitter(paragraphSplitter::split)
+                    .embeddingModel(embeddingModel)
+                    .embeddingStore(pgVectorStore)
+                    .build();
+
+            embeddingStoreIngestor.ingest(newDocuments);
+        } else {
+            log.info("No new documents found to process.");
+        }
     }
 }
