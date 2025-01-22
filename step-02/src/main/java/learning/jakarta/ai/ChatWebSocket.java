@@ -6,6 +6,7 @@ import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @ServerEndpoint("/chat")
 public class ChatWebSocket {
+    private final static Duration MAX_IDLE_TIMEOUT = Duration.ofMinutes(5);
     private static final Map<String, Session> activeSessions = new ConcurrentHashMap<>();
 
     @Inject
@@ -29,13 +31,17 @@ public class ChatWebSocket {
 
         String userId = userIdOpt.get();
         log.info("Session opened for user: {}", userId);
+        session.setMaxIdleTimeout(MAX_IDLE_TIMEOUT.toMillis());
+
         activeSessions.put(userId, session);
         log.info("Session registered for userId: {}", userId);
         sendMessage(session, """
-                Welcome to the Jakarta EE AI Chatbot! 🚀
-                I’m here to help with all your Jakarta EE questions—whether you’re exploring the basics or solving advanced challenges.  
-                Let’s build something great together! 🎉""");
-        sendMessage(session,"[END]");
+                Welcome to the Java Concurrency Chatbot! 🚀 
+                I’m here to help you explore the concepts, evolution, and practical applications of concurrency in Java. 
+                Whether you’re just starting out or tackling advanced challenges, let’s unravel the complexities of 
+                Java concurrency together! 🎉
+                """);
+        sendMessage(session, "[END]");
     }
 
     @OnMessage
