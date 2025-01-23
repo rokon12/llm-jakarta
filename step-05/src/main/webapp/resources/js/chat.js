@@ -6,6 +6,12 @@ let retryCount = 0;
 const maxRetries = 5;
 const retryDelay = 2000; // 2 seconds
 
+marked.use({
+    pedantic: false,
+    gfm: true,
+    breaks: false
+});
+
 function getUserId() {
     let userId = getCookie("userId");
     if (!userId) {
