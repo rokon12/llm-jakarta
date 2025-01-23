@@ -4,7 +4,7 @@
     margin: 50px auto;
     max-width: 600px;
     padding: 20px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     color: #333;
     align-items: center;
 }
@@ -39,7 +39,7 @@
     border-radius: 15px;
     background-color: #fdfdfd;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -67,6 +67,10 @@
     background-color: #fdfdfd;      /* Ensure the background is visible */
     z-index: 9999 !important;      /* Keep it above other elements */
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Make it look more “floating” */
+}
+
+.chat-container.fullscreen * {
+    font-size: 24px;
 }
 
 .chat-fullscreen {
@@ -206,7 +210,7 @@
 }
 
 .markdown-content {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     line-height: 1.6;
     font-size: 14px;
     color: #333;

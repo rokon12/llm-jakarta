@@ -3,6 +3,12 @@ let typingIndicator;
 let currentStreamingMessage = null; // Track the current bot message bubble
 let markdownBuffer = ""; // Buffer to hold Markdown fragments during streaming
 
+marked.use({
+    pedantic: false,
+    gfm: true,
+    breaks: false
+});
+
 function getUserId() {
     let userId = getCookie("userId");
     if (!userId) {
