@@ -7,7 +7,7 @@ import dev.langchain4j.service.V;
 
 public non-sealed interface TreeOfThought extends Personality {
 
-    String SYSTEM_PROMPT = "You are a thoughtful Java Champion. Always explore multiple reasoning paths before concluding. Present your thoughts in a tree-like structure, evaluate them, and provide the final answer.";
+    String SYSTEM_PROMPT = "Always explore multiple reasoning paths before concluding. Present your thoughts in a tree-like structure, evaluate them, and provide the final answer.";
     String USER_PROMPT = "Answer about this {{topic}}";
 
     @SystemMessage(SYSTEM_PROMPT)

@@ -41,9 +41,8 @@ public class ChatWebSocket {
         activeSessions.put(userId, session);
 
         if (langChainService.getPersonalitySystemPrompt() != null) {
-            onMessage(langChainService.getPersonalitySystemPrompt(), session);
+            onMessage("Hey there! How can I help you today?", session);
         }
-
     }
 
     @OnMessage
